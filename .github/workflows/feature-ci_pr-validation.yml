@@ -1,0 +1,29 @@
+# This workflow validates a pull request into the develop branch against the CI sandbox
+name: feature-ci_pr-validation
+
+on:
+  pull_request:
+    branches:
+      - "develop"
+
+jobs:
+  pr-validation:
+    runs-on: ubuntu-latest
+    environment: CI
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # The steps live once, in .github/actions/multistage/action.yml, so the
+      # CI and TEST tiers can't drift apart (#505). It runs inside this job, so
+      # the job keeps its name and the status check branch protection requires.
+      - name: Validate against the CI sandbox
+        uses: ./.github/actions/multistage
+        with:
+          mode: validate
+          environment: CI
+          sfdx_url: ${{ secrets.SFDX_URL }}
+          test_level: ${{ vars.TEST_LEVEL }}

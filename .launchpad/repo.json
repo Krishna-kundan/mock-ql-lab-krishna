@@ -8,7 +8,7 @@
   "sf_skills": "plugin",
   "add_ons": [
     {
-      "id": "deploy-simple",
+      "id": "deploy-multistage",
       "configured": true
     }
   ],
