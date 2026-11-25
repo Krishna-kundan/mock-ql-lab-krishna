@@ -24,7 +24,7 @@ Status: ⬜ Not started · ✅ Delivered · 🔄 Needs re-verify (scope drifted)
 | INT-006 | 1 | ⬜ Not started | — | — | — | — | — |
 | INT-007 | 1 | ⬜ Not started | — | — | — | — | — |
 | INT-008 | 1 | ⬜ Not started | — | — | — | — | — |
-| INT-009 | 1 | ⬜ Not started | — | — | — | 2026-11-24 | — |
+| INT-009 | 1 | ✅ Delivered | https://github.com/Krishna-kundan/mock-ql-lab-krishna/pull/3 | — | `34b8c93b947e` | 2026-11-24 | 2026-11-25 |
 | INT-010 | 2 | ⬜ Not started | — | — | — | — | — |
 | INT-011 | 2 | ⬜ Not started | — | — | — | — | — |
 | INT-012 | 2 | ⬜ Not started | — | — | — | — | — |
