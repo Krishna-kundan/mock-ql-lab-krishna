@@ -50,8 +50,8 @@ _none_
 
 ## Open questions
 
-- Q-016: Does PTSF have source control and a release process today, and who approves releases? (G1205) (Resolver: PTSF platform owner) — UNANSWERED
-- Q-056: Which profile, permission set group and permission sets does each persona this intent affects (platform-admin) get? The persona files leave this to decide. (Resolver: Trusted Guide) — UNANSWERED
+- Q-016: Does PTSF have source control and a release process today, and who approves releases? (G1205) (Resolver: PTSF platform owner) — ANSWERED: Provisional: git on GitHub; the Trusted Guide approves releases. See decisions/2026-11-25-int-009-provisional-answers.md
+- Q-056: Which profile, permission set group and permission sets does each persona this intent affects (platform-admin) get? The persona files leave this to decide. (Resolver: Trusted Guide) — ANSWERED: Provisional: default System Administrator profile, no added permission sets. See decisions/2026-11-25-int-009-provisional-answers.md
 
 ## Grounding
 
