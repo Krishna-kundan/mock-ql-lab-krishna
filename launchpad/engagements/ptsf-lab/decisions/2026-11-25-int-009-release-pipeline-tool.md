@@ -26,7 +26,7 @@ GitHub Actions multi-stage, as ratified in 'intents/INT-009/design.md':
 **Provisional — the build proceeds; criteria that depend on them stay ⛔ blocked until answered:**
 
 - Q-design-2: hold Full sandbox refreshes, or pull INT-026 forward, before production holds patient data
-- Q-design-3: how Priya's customer sign-off is captured (GitHub PR approval, or an outside record cited in the PR)
+- Q-design-3: how the PTSF platform owner's customer sign-off is captured (GitHub PR approval, or an outside record cited in the PR)
 - Q-design-4: proving the credential workflow with a throwaway test External Credential
 - Q-design-5: backup product, licences and retention
 - Q-design-6: the deployment user's licence and profile, and whether INT-003's monitoring covers it

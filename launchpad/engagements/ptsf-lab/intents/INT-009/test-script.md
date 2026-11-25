@@ -34,7 +34,7 @@ design_hash: 3c34d5b238fc
 | INT-009-C10 | The scan report is attached as a run artifact on the PRs into `develop` and `release/*` (acceptance: "code scan result attached at each step") | Scene C, steps 2 and 5 | ⛔ | Blocked: needs the `CI` and `TEST` sandboxes (C1, C2) |
 | INT-009-C11 | Guardrail ("Production deploys only on an explicit user instruction"): no workflow deploys to production on a push or merge; `prod_deploy.yml` triggers only on `workflow_dispatch` | Repo assertion: `prod_deploy.yml` has `on: workflow_dispatch` and no other trigger; it's the only workflow that runs in the `Production` environment (`main_pr-validation.yml` runs in `Production-Validate`, check-only) | ✅ | (PR review) |
 | INT-009-C12 | Guardrail ("Production deploys only on an explicit user instruction"): a `prod_deploy.yml` run waits for the Trusted Guide's approval and deploys only after it | Scene B, steps 5–7 (against `ql-lab`) | 👁 | _pending_ |
-| INT-009-C13 | platform-admin: Priya approves the release as the customer before the production deploy (acceptance: "then approves its release to production"; provisional-answers record, two-part approval) | Scene E | ⛔ | Blocked: Q-design-3 (how Priya's sign-off is captured) |
+| INT-009-C13 | platform-admin: the PTSF platform owner approves the release as the customer before the production deploy (acceptance: "then approves its release to production"; provisional-answers record, two-part approval) | Scene E | ⛔ | Blocked: Q-design-3 (how the PTSF platform owner's sign-off is captured) |
 | INT-009-C14 | `credentials_reestablish.yml` writes each listed External Credential's secret from GitHub Environment secrets after a refresh (build target: "Per-environment integration credentials re-established after each sandbox refresh"; design §Credentials) | Scene F | ⛔ | Blocked: Q-design-4 (test credential), and no sandbox in `ql-lab` |
 | INT-009-C15 | No credential secret is in the repo: `config/credentials.json` holds credential and principal names only (design §Credentials) | Repo assertion: `config/credentials.json` keys are only `credential`, `principal` and `principalType`; the secret-literal grep (see Automated proofs, C15) over `config/` and `.github/` returns no matches | ✅ | (PR review) |
 | INT-009-C16 | admin: the deploy runbook orders the post-refresh steps: re-issue `TEST` auth, run the credential workflow straight after activation, and leave a "masking before access" step for INT-026 (design §Environments, §Credentials; Neighboring scope) | Scene G (runbook review) | 👁 | _pending_ |
@@ -97,12 +97,12 @@ None. No criterion is an object, field, FLS or Flow fact. The profile check (C19
 
 ### Scene E — Acceptance walkthrough (persona: platform-admin; criteria C13, C21)
 1. A developer changes the Subsidy Application page layout on a feature branch.
-2. Priya watches it move through Scene C (into `develop`, then `release/*`) and opens the scan report at each step.
-3. Priya opens the `release/*` → `main` PR and opens its scan report.
-4. Priya records her approval of the release, in the way Q-design-3 settles.
+2. The PTSF platform owner watches it move through Scene C (into `develop`, then `release/*`) and opens the scan report at each step.
+3. The PTSF platform owner opens the `release/*` → `main` PR and opens its scan report.
+4. The PTSF platform owner records their approval of the release, in the way Q-design-3 settles.
 5. The Trusted Guide runs `prod_deploy.yml` and approves it (Scene B, steps 6–7).
-6. Priya opens a Subsidy Application record in production by Classic URL (`/<record Id>`) and sees the layout change.
-**Expected:** Priya sees the change at every stage and approves it before it reaches production. **Sign-off:** _name / date / pass·fail_.
+6. The PTSF platform owner opens a Subsidy Application record in production by Classic URL (`/<record Id>`) and sees the layout change.
+**Expected:** the PTSF platform owner sees the change at every stage and approves it before it reaches production. **Sign-off:** _name / date / pass·fail_.
 
 ### Scene F — Credentials after a refresh (persona: admin; criterion C14)
 1. Add one throwaway test External Credential to the sandbox and to `config/credentials.json` (if Q-design-4 allows it).
