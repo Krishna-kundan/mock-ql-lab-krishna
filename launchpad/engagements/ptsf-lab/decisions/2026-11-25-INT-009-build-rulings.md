@@ -1,6 +1,6 @@
 # INT-009: build rulings
 
-**Date:** 2026-11-25 · **Deciders:** agent rulings, pending Trusted Guide review in PR §6 · **Intents:** INT-009 · **Status:** Open (the build is in progress)
+**Date:** 2026-11-25 · **Deciders:** Krishna Kundan (Trusted Guide; reviewed the agent rulings, none overturned) · **Intents:** INT-009 · **Status:** Open (the build is in progress)
 
 routing: recommended sf-pi, picked claude-code, override, the Trusted Guide chose this Claude Code session as the build agent
 brief: ptsf-lab/INT-009 scope=34b8c93b947e proof=ab1a4ff5a4f3 design=3c34d5b238fc decisions=d75039ae934b sources=ptsf-lab-2026@144731f83592 agent=claude-code recommended=sf-pi
@@ -8,6 +8,7 @@ brief: ptsf-lab/INT-009 scope=34b8c93b947e proof=ab1a4ff5a4f3 design=3c34d5b238f
 ## Known gaps
 
 - The Full sandbox licence and the Backup and Recover licence are customer purchases the design relies on, but they aren't declared in the intent's External Dependencies. The Trusted Guide deferred the `/ql-refine-intent` edit on 2026-11-25. Until it's made, the dependent criteria (C2, C6, C10, C17) are ⛔ blocked and have no declared dependency to point at. Carry this into the PR's gaps section.
+- C1, C2, C5, C6, C10, C13, C14, C17, C20, C21 accepted as gaps by Krishna Kundan, 2026-11-25: they need sandboxes, licences, or open design questions (Q-design-3 to 6) that ql-lab can't provide; each is proven when its blocker clears.
 
 ## Rulings
 
