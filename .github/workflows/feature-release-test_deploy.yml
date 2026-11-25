@@ -1,0 +1,29 @@
+# This workflow deploys code merged to a release branch to the TEST sandbox
+name: feature-release-test_deploy
+
+on:
+  push:
+    branches:
+      - "release/*"
+
+jobs:
+  feature-deploy:
+    runs-on: ubuntu-latest
+    environment: TEST
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # The steps live once, in .github/actions/multistage/action.yml, so the
+      # CI and TEST tiers can't drift apart (#505).
+      - name: Deploy to the TEST sandbox
+        uses: ./.github/actions/multistage
+        with:
+          mode: deploy
+          environment: TEST
+          sfdx_url: ${{ secrets.SFDX_URL }}
+          test_level: ${{ vars.TEST_LEVEL }}
+          full_build: ${{ vars.FULL_BUILD }}

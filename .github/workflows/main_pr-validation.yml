@@ -1,0 +1,29 @@
+# Validates a pull request into main against production, check-only (INT-009).
+# Engagement-owned: not part of the deploy-multistage add-on.
+name: main_pr-validation
+
+on:
+  pull_request:
+    branches:
+      - "main"
+
+jobs:
+  pr-validation:
+    runs-on: ubuntu-latest
+    # Validate-only environment, no required reviewer, so a validation never waits for approval.
+    # Production (with the reviewer) is used only by prod_deploy.yml.
+    environment: Production-Validate
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate against production (check-only)
+        uses: ./.github/actions/multistage
+        with:
+          mode: validate
+          environment: Production-Validate
+          sfdx_url: ${{ secrets.SFDX_URL }}
+          test_level: ${{ vars.TEST_LEVEL }}
