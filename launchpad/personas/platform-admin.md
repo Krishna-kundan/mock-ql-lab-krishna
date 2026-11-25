@@ -7,6 +7,6 @@ PTSF's platform owner. Administers the org, the release pipeline, sandboxes and 
 
 ## Access
 
-- **Profile:** to decide
+- **Profile:** System Administrator, provisional (ptsf-lab/INT-009, decisions/2026-11-25-int-009-provisional-answers.md)
 - **Permission set group:** to decide
 - **Permission sets:** to decide

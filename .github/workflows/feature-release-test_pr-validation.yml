@@ -1,0 +1,30 @@
+# This workflow validates a pull request into a release branch against the TEST sandbox
+name: feature-release-test_pr-validation
+
+on:
+  pull_request:
+    branches:
+      - "release/*"
+
+jobs:
+  pr-validation:
+    runs-on: ubuntu-latest
+    environment: TEST
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # The steps live once, in .github/actions/multistage/action.yml, so the
+      # CI and TEST tiers can't drift apart (#505). It runs inside this job, so
+      # the job keeps its name and the status check branch protection requires.
+      - name: Validate against the TEST sandbox
+        uses: ./.github/actions/multistage
+        with:
+          mode: validate
+          environment: TEST
+          sfdx_url: ${{ secrets.SFDX_URL }}
+          test_level: ${{ vars.TEST_LEVEL }}
+          full_build: ${{ vars.FULL_BUILD }}

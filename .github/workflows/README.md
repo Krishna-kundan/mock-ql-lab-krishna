@@ -7,10 +7,10 @@ Two groups are **always on**, and the deploy layer is **the one pipeline you pic
 | Group | Files | Notes |
 |---|---|---|
 | **Trust chain** (always-on) | `intent-trust-chain.yml` | The Launchpad-unique gates — intent `validate`, delivery-stamp regression, scope-drift, README delivery-index, test-script coverage, FLS advisory. Needs **no Salesforce org** (pure git + node), so it runs in every repo regardless of your deploy pipeline. It fails, naming `/ql-resync`, when `launchpad/scripts/intent-ledger.mjs` is missing or older than the workflow needs, rather than skipping its gates. Don't delete it. |
-| **Deploy — simple** (add-on `deploy-simple`) | `sf-validate.yml`, `sf-deploy.yml` | Lightweight **feature → main** flow: validate on PR, deploy on merge to `main`. |
+| **Deploy — simple** (add-on `deploy-simple`) | `sf-validate.yml`, `sf-deploy.yml` | Lightweight **feature → main** flow: validate on PR, deploy on merge to `main`. *Not installed in this repo* (ptsf-lab/INT-009 uses multi-stage). |
 | **Deploy — multi-stage** (add-on `deploy-multistage`) | `feature-ci_pr-validation.yml`, `feature-ci_deploy.yml`, `feature-release-test_pr-validation.yml`, `feature-release-test_deploy.yml`, the shared `.github/actions/multistage/action.yml`, `code-analyzer.yml` | Full **develop → release/* → main** flow with CI + TEST sandboxes (documented below). |
 
-**On a PR:** `intent-trust-chain.yml` runs on every PR except one that only touches harness files (`.claude/`, `.agents/`, editor config, `skills-lock.json`). The deploy check is `sf-validate.yml` on the simple pipeline (it also skips a PR that only touches `launchpad/`, harness files or root-level `*.md`), or `feature-ci_pr-validation.yml` for a PR into `develop` and `feature-release-test_pr-validation.yml` for one into `release/*` on the multi-stage pipeline. Which of these must pass before merge is your branch protection setting. Turn on **Require branches to be up to date before merging** too: two open PRs that each add `INT-012` both pass on their own, and only a re-run against the updated base lets `validate` catch the duplicate (`renumber` then fixes the one that hasn't merged).
+**On a PR:** `intent-trust-chain.yml` runs on every PR except one that only touches harness files (`.claude/`, `.agents/`, editor config, `skills-lock.json`). The deploy check is `sf-validate.yml` on the simple pipeline (it also skips a PR that only touches `launchpad/`, harness files or root-level `*.md`), or `feature-ci_pr-validation.yml` for a PR into `develop` and `feature-release-test_pr-validation.yml` for one into `release/*` on the multi-stage pipeline. In this repo a PR into `main` also runs `main_pr-validation.yml`, a check-only validation against production (see `PRODUCTION.md`). Which of these must pass before merge is your branch protection setting. Turn on **Require branches to be up to date before merging** too: two open PRs that each add `INT-012` both pass on their own, and only a re-run against the updated base lets `validate` catch the duplicate (`renumber` then fixes the one that hasn't merged).
 
 A repo has exactly one deploy pipeline. To switch, ask `/ql-resync` for the add-ons: it swaps the files in one step and records the change.
 
@@ -31,7 +31,7 @@ These workflows don't run until Actions is enabled for the repo, and in many org
 Symptom if you skip it: a push or PR produces **no workflow run at all**. That looks like a broken trigger, so the reflex is to push empty "re-trigger CI" commits. They won't help, because the switch is off. Enable Actions first, then push. (A run that *does* appear but ends in `startup_failure` with 0 jobs is a different problem: no runner. See Troubleshooting.)
 
 ## Git flow and Environment Structure
-These workflows assume a single stream Salesforce development environment. There are multiple salesforce scratch orgs that are spun up to develop features, and congregate to a CI sandbox. Once the appropriate tests and checks are completed, they work is moved to the test sandbox. Once testing is complete, a full branch merge is done to the main trunk where it is staged and then deployed to production.
+These workflows assume a single stream Salesforce development environment. There are multiple Salesforce Developer sandboxes used to develop features, and congregate to a CI sandbox. Once the appropriate tests and checks are completed, they work is moved to the test sandbox. Once testing is complete, a full branch merge is done to the main trunk where it is staged and then deployed to production. In this repo the production stage (`main_pr-validation.yml`, `prod_deploy.yml`) and the post-refresh credential workflow (`credentials_reestablish.yml`) are documented in `PRODUCTION.md`.
 ![Github branching and environments](/plugins/quantum-leap-launchpad/templates/.assets/QuantumLeapDevOps.png)
 
 In Github, each sandbox should be configured as an environment. This allows you to set up a login credential for each sandbox and variables for the workflows. 
@@ -94,7 +94,7 @@ This is a deployment job that runs when a merge or commit is made to the develop
 
 ### TEST Environment
 #### TEST Environment Setup
-To set this job up, you need to create a CI environment in github and the variables.
+To set this job up, you need to create a TEST environment in github and the variables.
 
   * In the Github repository, go to Settings
   * Click on **Environments**
