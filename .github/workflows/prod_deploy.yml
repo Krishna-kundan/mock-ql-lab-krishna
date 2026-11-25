@@ -1,0 +1,34 @@
+# Deploys what main holds to production, only when a person runs it.
+# INT-009 guardrail: production deploys only on an explicit user instruction.
+# Never triggered by a push or merge; the Production environment's required
+# reviewer (the Trusted Guide) approves each run.
+name: prod_deploy
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: prod-deploy
+  cancel-in-progress: false
+
+jobs:
+  prod-deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: Production
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # full_build: a manual run has no push range, so a delta would cover only the last commit.
+      - name: Deploy main to production
+        uses: ./.github/actions/multistage
+        with:
+          mode: deploy
+          environment: Production
+          sfdx_url: ${{ secrets.SFDX_URL }}
+          test_level: ${{ vars.TEST_LEVEL }}
+          full_build: "true"

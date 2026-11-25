@@ -32,7 +32,7 @@ design_hash: 3c34d5b238fc
 | INT-009-C8 | Code Analyzer fails the check when a change has a violation at severity 2 or worse (build target: "Static code scanning runs on every promotion"; design §Static code scanning) | Scene D (deliberate violation, PR into `main`) | 👁 | _pending_ |
 | INT-009-C9 | The scan report is attached as a run artifact on the PR into `main` (acceptance: "code scan result attached at each step") | Scene B, step 3 | 👁 | _pending_ |
 | INT-009-C10 | The scan report is attached as a run artifact on the PRs into `develop` and `release/*` (acceptance: "code scan result attached at each step") | Scene C, steps 2 and 5 | ⛔ | Blocked: needs the `CI` and `TEST` sandboxes (C1, C2) |
-| INT-009-C11 | Guardrail ("Production deploys only on an explicit user instruction"): no workflow deploys to production on a push or merge; `prod_deploy.yml` triggers only on `workflow_dispatch` | Repo assertion: `prod_deploy.yml` has `on: workflow_dispatch` and no other trigger; no other workflow targets the `Production` environment without `--dry-run` | ✅ | (PR review) |
+| INT-009-C11 | Guardrail ("Production deploys only on an explicit user instruction"): no workflow deploys to production on a push or merge; `prod_deploy.yml` triggers only on `workflow_dispatch` | Repo assertion: `prod_deploy.yml` has `on: workflow_dispatch` and no other trigger; it's the only workflow that runs in the `Production` environment (`main_pr-validation.yml` runs in `Production-Validate`, check-only) | ✅ | (PR review) |
 | INT-009-C12 | Guardrail ("Production deploys only on an explicit user instruction"): a `prod_deploy.yml` run waits for the Trusted Guide's approval and deploys only after it | Scene B, steps 5–7 (against `ql-lab`) | 👁 | _pending_ |
 | INT-009-C13 | platform-admin: Priya approves the release as the customer before the production deploy (acceptance: "then approves its release to production"; provisional-answers record, two-part approval) | Scene E | ⛔ | Blocked: Q-design-3 (how Priya's sign-off is captured) |
 | INT-009-C14 | `credentials_reestablish.yml` writes each listed External Credential's secret from GitHub Environment secrets after a refresh (build target: "Per-environment integration credentials re-established after each sandbox refresh"; design §Credentials) | Scene F | ⛔ | Blocked: Q-design-4 (test credential), and no sandbox in `ql-lab` |
@@ -49,7 +49,7 @@ design_hash: 3c34d5b238fc
 None as Apex. The four repo assertions (C4, C11, C15, C18) are shell checks the reviewer re-runs on the PR's commit:
 
 - **C4:** `ls .github/workflows/` shows the five named workflows and no `sf-validate.yml` or `sf-deploy.yml`.
-- **C11:** `yq '.on | keys' .github/workflows/prod_deploy.yml` prints only `workflow_dispatch`. `grep -L -- "--dry-run" $(grep -l "Production" .github/workflows/*.yml)` prints only `prod_deploy.yml`.
+- **C11:** `yq '.on | keys' .github/workflows/prod_deploy.yml` prints only `workflow_dispatch`. `grep -lE "environment: Production$" .github/workflows/*.yml` prints only `prod_deploy.yml`. `grep -n "mode:" .github/workflows/main_pr-validation.yml` prints only `mode: validate` (the shared action adds `--dry-run` for that mode).
 - **C15:** `jq '[.[] | keys[]] | unique' config/credentials.json` prints `["credential","principal"]`. `git grep -nIE "(password|secret|token|client_secret)\s*[:=]" -- config/ .github/` returns no literal values (references to `${{ secrets.* }}` are expected and fine).
 - **C18:** `git grep -n "SandboxPostCopy" force-app/` exits 1.
 

@@ -364,7 +364,18 @@ runs:
         fi
 
         # The PR's own changes only (the delta tree), on a FULL_BUILD too.
-        sf code-analyzer run --workspace delta --config-file code-analyzer.yml --severity-threshold 2
+        sf code-analyzer run --workspace delta --config-file code-analyzer.yml --severity-threshold 2 \
+          --output-file code-analyzer-results.html
+
+    # ptsf-lab/INT-009 local edit (not yet upstream): attach the scan report to the run,
+    # including when the scan fails the check.
+    - name: Upload Code Analyzer report
+      if: always() && steps.changes.outputs.deploy == 'true' && inputs.mode == 'validate'
+      uses: actions/upload-artifact@v4
+      with:
+        name: code-analyzer-${{ inputs.environment }}
+        path: code-analyzer-results.html
+        if-no-files-found: ignore
 
     # Validate (a PR) or deploy (a push). Same delta, same test selection; a
     # validation adds --dry-run and --json, a deploy adds --wait.
