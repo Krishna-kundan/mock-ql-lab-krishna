@@ -36,7 +36,7 @@ design_hash: 3c34d5b238fc
 | INT-009-C12 | Guardrail ("Production deploys only on an explicit user instruction"): a `prod_deploy.yml` run waits for the Trusted Guide's approval and deploys only after it | Scene B, steps 5–7 (against `ql-lab`) | 👁 | _pending_ |
 | INT-009-C13 | platform-admin: Priya approves the release as the customer before the production deploy (acceptance: "then approves its release to production"; provisional-answers record, two-part approval) | Scene E | ⛔ | Blocked: Q-design-3 (how Priya's sign-off is captured) |
 | INT-009-C14 | `credentials_reestablish.yml` writes each listed External Credential's secret from GitHub Environment secrets after a refresh (build target: "Per-environment integration credentials re-established after each sandbox refresh"; design §Credentials) | Scene F | ⛔ | Blocked: Q-design-4 (test credential), and no sandbox in `ql-lab` |
-| INT-009-C15 | No credential secret is in the repo: `config/credentials.json` holds credential and principal names only (design §Credentials) | Repo assertion: `config/credentials.json` keys are only `credential` and `principal`; the secret-literal grep (see Automated proofs, C15) over `config/` and `.github/` returns no matches | ✅ | (PR review) |
+| INT-009-C15 | No credential secret is in the repo: `config/credentials.json` holds credential and principal names only (design §Credentials) | Repo assertion: `config/credentials.json` keys are only `credential`, `principal` and `principalType`; the secret-literal grep (see Automated proofs, C15) over `config/` and `.github/` returns no matches | ✅ | (PR review) |
 | INT-009-C16 | admin: the deploy runbook orders the post-refresh steps: re-issue `TEST` auth, run the credential workflow straight after activation, and leave a "masking before access" step for INT-026 (design §Environments, §Credentials; Neighboring scope) | Scene G (runbook review) | 👁 | _pending_ |
 | INT-009-C17 | admin: Backup and Recover is enabled on production, with objects, files and retention set (build target: "Backup and recovery configured for production") | Scene H | ⛔ | Blocked: Q-design-5 (product, licences, retention); no backup licence in `ql-lab` |
 | INT-009-C18 | Out of scope ("Must not build sandbox data masking"): no `SandboxPostCopy` class or masking automation ships | Repo assertion: `git grep -n "SandboxPostCopy" force-app/` returns nothing | ✅ | (PR review) |
@@ -50,7 +50,7 @@ None as Apex. The four repo assertions (C4, C11, C15, C18) are shell checks the 
 
 - **C4:** `ls .github/workflows/` shows the five named workflows and no `sf-validate.yml` or `sf-deploy.yml`.
 - **C11:** `yq '.on | keys' .github/workflows/prod_deploy.yml` prints only `workflow_dispatch`. `grep -lE "environment: Production$" .github/workflows/*.yml` prints only `prod_deploy.yml`. `grep -n "mode:" .github/workflows/main_pr-validation.yml` prints only `mode: validate` (the shared action adds `--dry-run` for that mode).
-- **C15:** `jq '[.[] | keys[]] | unique' config/credentials.json` prints `["credential","principal"]`. `git grep -nIE "(password|secret|token|client_secret)\s*[:=]" -- config/ .github/` returns no literal values (references to `${{ secrets.* }}` are expected and fine).
+- **C15:** `jq '[.[] | keys[]] | unique - ["credential","principal","principalType"]' config/credentials.json` prints `[]` (no other keys, so no secret values). `git grep -nIE "(password|secret|token|client_secret)\s*[:=]" -- config/ .github/` returns no literal values (references to `${{ secrets.* }}` are expected and fine).
 - **C18:** `git grep -n "SandboxPostCopy" force-app/` exits 1.
 
 ## Org assertions
@@ -106,7 +106,7 @@ None. No criterion is an object, field, FLS or Flow fact. The profile check (C19
 
 ### Scene F — Credentials after a refresh (persona: admin; criterion C14)
 1. Add one throwaway test External Credential to the sandbox and to `config/credentials.json` (if Q-design-4 allows it).
-2. Put its secret in the sandbox's GitHub Environment secrets.
+2. Add its entry to the `EXTERNAL_CREDENTIAL_SECRETS` secret on the sandbox's GitHub Environment (format: `.github/workflows/README.md`).
 3. Refresh the sandbox, or clear the principal's secret by hand.
 4. Run `credentials_reestablish.yml` for that environment.
 5. In the sandbox, open Setup → Named Credentials → External Credentials → the test credential. Confirm the principal shows its authentication as set.
