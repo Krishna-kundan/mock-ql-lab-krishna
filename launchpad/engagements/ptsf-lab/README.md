@@ -49,7 +49,7 @@ _Derived view — intent titles from `intents/`, status from `delivery/intent-le
 | INT-006 | ⬜ Not started | — | Single sign-on for staff across three regional directories |
 | INT-007 | ⬜ Not started | — | Background Health Insurance Checker service with retry |
 | INT-008 | ⬜ Not started | — | Address validation and geocoding service |
-| INT-009 | ⬜ Not started | — | Environments and source-driven release pipeline |
+| INT-009 | ⬜ Started | — | Environments and source-driven release pipeline |
 
 ### Phase 2
 

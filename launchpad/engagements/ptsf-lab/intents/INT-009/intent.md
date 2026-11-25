@@ -7,6 +7,7 @@ surface: devops
 origin: scopezilla
 source: ptsf-lab-2026#INT-009
 title: Environments and source-driven release pipeline
+ratified: 2026-11-24 by Krishna Kundan @ 34b8c93b947e
 ---
 
 # INT-009 — Environments and source-driven release pipeline
