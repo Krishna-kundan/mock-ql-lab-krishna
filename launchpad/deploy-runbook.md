@@ -59,6 +59,7 @@ One checkbox per prerequisite; check it off when it's cleared. (`👤` go-live g
 - [ ] The `SFDX_URL` secret on the `Production` and `Production-Validate` GitHub Environments is re-issued against PTSF production. Until then it points at the lab stand-in org. (INT-009)
 - [ ] How the customer's release approval is captured is settled, and the approver has the GitHub access it needs (Q-design-3). (INT-009)
 - [ ] The deployment user is named, and it and the backup-restore admins are in the break-glass monitoring (Q-design-6, INT-003). (INT-009)
+- [ ] No repo-level `SFDX_URL` secret remains; every GitHub Environment has its own, and `Production` has its required reviewer. (INT-009)
 
 Surface what's still open at any time (advisory — never blocks):
 
@@ -75,6 +76,8 @@ Setup detail for each step: `.github/workflows/README.md` (CI, TEST) and `.githu
 
 - 🔁 Enable GitHub Actions for the repo (Settings → Actions → General). (INT-009)
 - 🔁 In production, create a Developer sandbox for development and a Developer Pro sandbox for integration test; create the Full sandbox for UAT once it's licensed. (INT-009)
+- 🔁 Before any workflow runs, delete any repo-level `SFDX_URL` secret (Settings → Secrets and variables → Actions → Repository secrets). A job reads a repo-level secret when its environment has none, so a stage without its own secret logs in to whatever org the repo-level one points at. (INT-009)
+- 🔁 Create every GitHub Environment by hand **before** any workflow that uses it runs. GitHub creates a missing environment the first time a job names it, with no protection rules, so a first `prod_deploy.yml` run against a missing `Production` would deploy without a reviewer. Verify: Settings → Environments lists all four, and `Production` shows its required reviewer. (INT-009)
 - 🔁 In GitHub, create the Environments `CI` (Developer Pro sandbox), `TEST` (Full sandbox), `Production` (with the Trusted Guide as required reviewer) and `Production-Validate` (no reviewer). Give each an `SFDX_URL` secret for its org; `Production` and `Production-Validate` both hold production's. (INT-009)
 - 🔁 On `CI` and `TEST`, add the `EXTERNAL_CREDENTIAL_SECRETS` secret holding the values for every External Credential listed in `config/credentials.json`. (INT-009)
 
