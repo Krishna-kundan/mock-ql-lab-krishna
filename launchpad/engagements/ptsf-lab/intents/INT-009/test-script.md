@@ -106,7 +106,7 @@ None. No criterion is an object, field, FLS or Flow fact. The profile check (C19
 
 ### Scene F — Credentials after a refresh (persona: admin; criterion C14)
 1. Add one throwaway test External Credential to the sandbox and to `config/credentials.json` (if Q-design-4 allows it).
-2. Add its entry to the `EXTERNAL_CREDENTIAL_SECRETS` secret on the sandbox's GitHub Environment (format: `.github/workflows/README.md`).
+2. Add its entry to the `EXTERNAL_CREDENTIAL_SECRETS` secret on the sandbox's GitHub Environment (format: `.github/workflows/PRODUCTION.md`).
 3. Refresh the sandbox, or clear the principal's secret by hand.
 4. Run `credentials_reestablish.yml` for that environment.
 5. In the sandbox, open Setup → Named Credentials → External Credentials → the test credential. Confirm the principal shows its authentication as set.
