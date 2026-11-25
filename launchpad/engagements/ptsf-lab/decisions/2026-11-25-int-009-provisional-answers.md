@@ -24,6 +24,6 @@ Build to the rest of the build target as written. Proof criteria that rest on ei
 ## Consequences
 
 - Q-016's resolver is the PTSF platform owner. If their answer differs (another source-control host, or a customer-side approver), the pipeline and the approval step are reworked.
-- The Acceptance has Priya, the PTSF platform owner, approving the release to production. The Q-016 assumption names the Trusted Guide as approver. These need reconciling before delivery: either both approve (Priya signs off as the customer, and the Trusted Guide instructs the deploy, per the production-deploy guardrail), or the Acceptance changes through a scope-change refinement.
+- Release approval has two parts, and the Acceptance stays as written (Trusted Guide ruling, 2026-11-25). Priya, the PTSF platform owner, signs off on the release as the customer. The Trusted Guide then gives the explicit production-deploy instruction the guardrail requires. Neither step replaces the other.
 - Default System Administrator access for the platform admin still has to respect ADR 0001. Administrator access to medical history is the governed, logged break-glass exception (INT-003), not a block.
 - Q-056-style persona-access questions (Q-049 to Q-055) on other intents stay open. This record answers only Q-056.
