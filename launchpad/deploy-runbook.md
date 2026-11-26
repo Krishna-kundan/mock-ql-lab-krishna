@@ -85,6 +85,7 @@ Setup detail for each step: `.github/workflows/README.md` (CI, TEST) and `.githu
 Features that must be enabled before metadata referencing them will deploy or behave (e.g. Person
 Accounts, multi-currency, a cloud/feature license). Note ⛔ for irreversible enablements. Cross-link
 the PR/phase that introduced each.
+- ⛔ **Person Accounts**: turn on in every org (development, CI, TEST, UAT, production) before deploying any metadata that references person accounts. Irreversible: once on, it can't be turned off, and each person account uses more storage than a business account. Check installed packages for compatibility first. The enablement steps and prerequisites are confirmed at design time. (ptsf-lab/INT-001)
 
 ### 2. 📦 Deploy metadata
 ```bash
