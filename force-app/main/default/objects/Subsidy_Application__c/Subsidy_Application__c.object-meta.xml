@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>The Subsidy Application object holds one patient travel-subsidy request (INT-001). It records the Patient (required), Treatment Type, Reason, Status, Insurance Check Result, Approved Amount, Assigned Practitioner, Satellite Office and Region. Private by default. Commonly used for intake, allocation, assessment routing and approval.</description>
+    <enableBulkApi>true</enableBulkApi>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <externalSharingModel>Private</externalSharingModel>
+    <label>Subsidy Application</label>
+    <nameField>
+        <displayFormat>SA-{0000000}</displayFormat>
+        <label>Application Number</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Subsidy Applications</pluralLabel>
+    <sharingModel>Private</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

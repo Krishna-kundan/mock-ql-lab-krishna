@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Assessment__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>The assessment the grant was made for (INT-001)</description>
+    <label>Assessment</label>
+    <referenceTo>Assessment__c</referenceTo>
+    <relationshipLabel>Medical History Access</relationshipLabel>
+    <relationshipName>Medical_History_Access_Grants</relationshipName>
+    <required>false</required>
+    <type>Lookup</type>
+</CustomField>

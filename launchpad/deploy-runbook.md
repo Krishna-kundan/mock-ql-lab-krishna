@@ -95,6 +95,8 @@ Deploys objects/fields, Apex, Flows, permission sets, layouts, apps, etc. When d
 deploy **classes/fields before Flows** that reference them — `rollbackOnError` is whole-transaction
 and will silently un-deploy a class if a co-bundled Flow fails (`build-notes.md`).
 
+- ⚙️ **Turn off hierarchy access on the medical-history objects**, right after the first deploy that creates them. Setup → Sharing Settings → Organization-Wide Defaults → Edit → clear **Grant Access Using Hierarchies** for **Medical History** and **Medical History Access** → Save. Needs the Manage Sharing permission. The CustomObject metadata type has no field for this setting, so the deploy can't set it [docs:https://help.salesforce.com/s/articleView?id=platform.security_controlling_access_using_hierarchies.htm&release=264.0.0&type=5]. Verify: both rows show the box cleared (INT-001-C15). Until it's cleared, a manager inherits access to history that a user below them holds (ADR 0001). (ptsf-lab/INT-001)
+
 ### 3. ⚙️ Create Setup-data records the code reads
 Records that are **not** deployable metadata. Pattern: the deployed Apex falls back to a hardcoded
 default when each is absent, so the system runs without them but with default behavior. List each:

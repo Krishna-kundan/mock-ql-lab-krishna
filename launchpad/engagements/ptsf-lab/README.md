@@ -41,7 +41,7 @@ _Derived view — intent titles from `intents/`, status from `delivery/intent-le
 
 | Intent | Status | PR | Title |
 |--------|--------|----|-------|
-| INT-001 | ⬜ Not started | — | Core subsidy data model built for tens of millions of patients |
+| INT-001 | ⬜ Started | — | Core subsidy data model built for tens of millions of patients |
 | INT-002 | ⬜ Not started | — | Time-bound practitioner access to medical history |
 | INT-003 | ⬜ Not started | — | Medical-history lockdown for internal users with monitored break-glass access |
 | INT-004 | ⬜ Not started | — | Patient self-registration with email or Facebook |

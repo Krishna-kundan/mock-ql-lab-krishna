@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>INT-001: PTSF travel-subsidy app. Patients, practices, practitioners, applications, assessments, the treatment catalog and, for break-glass holders only, medical history.</description>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <label>PTSF Subsidy</label>
+    <navType>Standard</navType>
+    <tabs>standard-Account</tabs>
+    <tabs>standard-Contact</tabs>
+    <tabs>Subsidy_Application__c</tabs>
+    <tabs>Assessment__c</tabs>
+    <tabs>Treatment_Type__c</tabs>
+    <tabs>Practitioner_Treatment__c</tabs>
+    <tabs>Medical_History__c</tabs>
+    <tabs>Medical_History_Access__c</tabs>
+    <uiType>Lightning</uiType>
+</CustomApplication>

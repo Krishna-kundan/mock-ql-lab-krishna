@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Assigned_Practitioner__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>The medical practitioner assigned to the application (INT-001)</description>
+    <label>Assigned Practitioner</label>
+    <referenceTo>Contact</referenceTo>
+    <relationshipLabel>Assigned Subsidy Applications</relationshipLabel>
+    <relationshipName>Assigned_Subsidy_Applications</relationshipName>
+    <required>false</required>
+    <type>Lookup</type>
+</CustomField>
