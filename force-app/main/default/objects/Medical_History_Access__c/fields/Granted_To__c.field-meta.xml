@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Granted_To__c</fullName>
+    <description>The user given access (INT-001)</description>
+    <label>Granted To</label>
+    <referenceTo>User</referenceTo>
+    <relationshipName>Medical_History_Access_Grants</relationshipName>
+    <required>false</required>
+    <type>Lookup</type>
+</CustomField>

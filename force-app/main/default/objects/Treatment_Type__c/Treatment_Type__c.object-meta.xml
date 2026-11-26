@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>The Treatment Type object is the global catalog of 500+ treatments a patient can travel for (INT-001). It records Name, Code (unique external ID) and Active. Readable by all internal users. Commonly used for application capture, practitioner registration and allocation.</description>
+    <enableBulkApi>true</enableBulkApi>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <externalSharingModel>Private</externalSharingModel>
+    <label>Treatment Type</label>
+    <nameField>
+        <label>Treatment Type Name</label>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Treatment Types</pluralLabel>
+    <sharingModel>Read</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>The Medical History Access object records one time-bound grant of access to a Medical History (INT-001). It records the Medical History (required), Patient, Assessment, Granted To, Granted At and Revoked At. Private, with no hierarchy access. Commonly used for auditing who could see a patient history, when, and why.</description>
+    <enableBulkApi>true</enableBulkApi>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <externalSharingModel>Private</externalSharingModel>
+    <label>Medical History Access</label>
+    <nameField>
+        <displayFormat>MHA-{0000000}</displayFormat>
+        <label>Access Number</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Medical History Access</pluralLabel>
+    <sharingModel>Private</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

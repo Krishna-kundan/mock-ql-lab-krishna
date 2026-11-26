@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Assigned_Practitioner__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>The practitioner assigned to this assessment (INT-001)</description>
+    <label>Assigned Practitioner</label>
+    <referenceTo>Contact</referenceTo>
+    <relationshipLabel>Assigned Assessments</relationshipLabel>
+    <relationshipName>Assigned_Assessments</relationshipName>
+    <required>false</required>
+    <type>Lookup</type>
+</CustomField>

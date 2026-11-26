@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>The Practitioner Treatment object records that a medical practitioner is registered for a treatment type (INT-001), linking a Contact and a Treatment Type. Access follows both. Commonly used for practitioner onboarding and nearest-practitioner allocation.</description>
+    <enableBulkApi>true</enableBulkApi>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <externalSharingModel>ControlledByParent</externalSharingModel>
+    <label>Practitioner Treatment</label>
+    <nameField>
+        <displayFormat>PT-{0000000}</displayFormat>
+        <label>Registration Number</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Practitioner Treatments</pluralLabel>
+    <sharingModel>ControlledByParent</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>
