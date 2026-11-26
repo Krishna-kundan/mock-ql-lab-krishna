@@ -37,14 +37,14 @@ design_hash: 4bd2f82a8da2
 | INT-001-C12 | non-owner: opening the application, an assessment or the Medical History by record URL shows insufficient privileges (acceptance: "can't open them", the UI half of C9–C11) | Scene F | 👁 | _pending_ |
 | INT-001-C13 | platform-admin: on a seeded org, the Query Plan's first plan for the allocation filter (Practitioner Treatment by treatment type) and the patient-search filter (patient reference) leads with `Index`, not `TableScan` (acceptance: "Query Plan reports the allocation and patient-search filters as selective"; Detail: "Seeded"; build target: "the fields they filter on are indexed") | Scene G | ⚠️ | Covered: the plan is read on a small seed. Open: `ql-lab` has no sandboxes, so this runs in the build org until one exists; the production-scale seed waits on Q-001. |
 | INT-001-C14 | admin: the six custom objects and the custom metadata type exist with the ratified relationships: application → patient lookup; assessment → application master-detail; parent assessment self-lookup; medical history → patient lookup; access row lookups; junction master-detail to Contact and Treatment Type (guardrails: "Subsidy Application is a custom object, not Case"; "Medical history … on its own object"; design §Data model) | org-probe (see § Org assertions) | ✅ | (verify — green, 2026-11-26) |
-| INT-001-C15 | admin: org-wide defaults are Private on Subsidy Application, Medical History and Medical History Access; Controlled by Parent on Assessment and Practitioner Treatment; Public Read Only internally on Treatment Type; and access through the role hierarchy is off on Medical History and Medical History Access (build target: "Only users given access can see"; design §Sharing table) | org-probe (see § Org assertions) | ✅ | ⚠ org not verified |
+| INT-001-C15 | admin: org-wide defaults are Private on Subsidy Application, Medical History and Medical History Access; Controlled by Parent on Assessment and Practitioner Treatment; Public Read Only internally on Treatment Type; and access through the role hierarchy is off on Medical History and Medical History Access (build target: "Only users given access can see"; design §Sharing table) | Manual scene H (Setup → Sharing Settings). Supporting: the 2026-11-26 org-probe at c628790 confirmed the nine default-access values; hierarchy access can't be read by query | 👁 | _pending_ |
 | INT-001-C16 | admin: the filter keys are indexed: `Patient_Reference__c` and `Treatment_Type__c.Code__c` are unique External IDs; the junction's Treatment Type link is a relationship field (build target: "the fields they filter on are indexed"; design §Selective access) | org-probe (see § Org assertions) | ✅ | (verify — green, 2026-11-26) |
 | INT-001-C17 | admin: reason, both status fields, insurance-check result, transport type, distance band, satellite office and region are restricted picklists holding only `Placeholder 1`–`Placeholder 3` (out of scope: "Must not settle the business values … placeholder values"; decision Q-design-3 provisional) | `INT001_DataModelTest.lifecyclePicklistsHoldPlaceholdersOnly` | ✅ | (CI) |
 | INT-001-C18 | admin: the patient and practice record types exist and are active (build target: "Patients are held as individual (person) accounts"; design §Build sequence step 1) | org-probe (see § Org assertions) | ✅ | (verify — green, 2026-11-26) |
 | INT-001-C19 | admin: `PTSF_Data_Model_Admin` grants read and edit on the INT-001 fields of the four non-medical objects, plus their tabs (design §Sharing, permission sets; decision call 10, Q-049 for INT-001) | org-probe (see § Org assertions) | ✅ | (verify — green, 2026-11-26) |
 | INT-001-C20 | admin: `PTSF_Data_Model_Admin` grants no access to Medical History or Medical History Access (guardrail: "Medical history lives in this org on its own object", ADR 0001; design §Sharing) | `INT001_PrivacyTest.dataModelAdminPermSetGrantsNoMedicalHistory` | ✅ | (CI) |
 | INT-001-C21 | admin: `PTSF_Medical_History_Break_Glass` exists and grants read on Medical History and Medical History Access (design §Sharing, break-glass permission set; ADR 0001) | org-probe (see § Org assertions) | ✅ | (verify — green, 2026-11-26) |
-| INT-001-C22 | admin: each new custom object has a tab, and the tabs are in the PTSF app (design §Sharing, where the platform owner reaches each record; cascading consequences) | org-probe (see § Org assertions) | ✅ | ⚠ org not verified |
+| INT-001-C22 | admin: each new custom object has a tab, and the tabs are in the PTSF app (design §Sharing, where the platform owner reaches each record; cascading consequences) | Manual scene I (open the PTSF Subsidy app). Supporting: the 2026-11-26 org-probe at c628790 confirmed all six tabs exist | 👁 | _pending_ |
 | INT-001-C23 | admin: no Health Cloud, Nonprofit Cloud or OmniStudio object, and not the Industries `Assessment` object, is referenced in `force-app/` (guardrail: "Core platform only"; design §Architecture conformance) | Repo assertion R1 (see § Repo assertions) | ✅ | (PR review) |
 | INT-001-C24 | admin: `force-app/` holds exactly one object per concept: no per-office or per-region variant, and no travel-booking or payment object (guardrail: "Do not create a per-office or per-region variant"; out of scope: "Must not model travel booking or payment") | Repo assertion: `ls force-app/main/default/objects/` lists only the six INT-001 objects, `Subsidy_Rate__mdt`, and the `Account` and `PersonAccount` folders, which hold only record types and the Patient Reference field | ✅ | (PR review) |
 | INT-001-C25 | admin: INT-001 ships no sharing reason, sharing rule, Apex share code or grant automation (out of scope: "Must not build sharing grants for practitioners") | Repo assertion R2 (see § Repo assertions) | ✅ | (PR review) |
@@ -87,7 +87,7 @@ design_hash: 4bd2f82a8da2
 ## Org assertions
 
 > Run by `/ql-verify-build` against the build org before the PR. Predicates outside the standard set
-> (`sharing-model`, `external-sharing-model`, `hierarchy-access`, `field-external-id`) read
+> (`field-external-id`) read
 > `EntityDefinition` and `FieldDefinition` (⚠ the verifier may not support them yet: if it doesn't,
 > it reports them unverified, never as passed).
 
@@ -100,12 +100,6 @@ design_hash: 4bd2f82a8da2
   - `field-type(Medical_History_Access__c.Medical_History__c, Lookup)` · `field-type(Medical_History_Access__c.Assessment__c, Lookup)` · `field-type(Medical_History_Access__c.Granted_To__c, Lookup)`
   - `field-type(Practitioner_Treatment__c.Practitioner__c, MasterDetail)` · `field-type(Practitioner_Treatment__c.Treatment_Type__c, MasterDetail)` (if the build fell back to two lookups, the PR names that ruling and these read `Lookup` plus `field-required`)
   - `field-exists(Subsidy_Rate__mdt.Transport_Type__c)` · `field-exists(Subsidy_Rate__mdt.Distance_Band__c)` · `field-type(Subsidy_Rate__mdt.Rate__c, Number)`
-- **INT-001-C15** (sharing defaults):
-  - `sharing-model(Subsidy_Application__c, Private)` · `sharing-model(Medical_History__c, Private)` · `sharing-model(Medical_History_Access__c, Private)`
-  - `sharing-model(Assessment__c, ControlledByParent)` · `sharing-model(Practitioner_Treatment__c, ControlledByParent)`
-  - `sharing-model(Treatment_Type__c, Read)`
-  - `external-sharing-model(Subsidy_Application__c, Private)` · `external-sharing-model(Medical_History__c, Private)` · `external-sharing-model(Medical_History_Access__c, Private)`
-  - `hierarchy-access(Medical_History__c, false)` · `hierarchy-access(Medical_History_Access__c, false)`
 - **INT-001-C16** (indexed filter keys):
   - `field-type(Account.Patient_Reference__c, Text)` · `field-external-id(Account.Patient_Reference__c)`
   - `field-external-id(Treatment_Type__c.Code__c)`
@@ -120,10 +114,6 @@ design_hash: 4bd2f82a8da2
 - **INT-001-C21** (break-glass permission set):
   - `permset-exists(PTSF_Medical_History_Break_Glass)`
   - `fls(read, Medical_History__c.Details__c, permset=PTSF_Medical_History_Break_Glass)` · `fls(read, Medical_History_Access__c.Granted_At__c, permset=PTSF_Medical_History_Break_Glass)` · `fls(read, Medical_History_Access__c.Revoked_At__c, permset=PTSF_Medical_History_Break_Glass)`
-- **INT-001-C22** (tabs and app):
-  - `tab-exists(Subsidy_Application__c)` · `tab-exists(Assessment__c)` · `tab-exists(Medical_History__c)` · `tab-exists(Medical_History_Access__c)` · `tab-exists(Treatment_Type__c)` · `tab-exists(Practitioner_Treatment__c)`
-  - `object-in-app(PTSF_Subsidy, Subsidy_Application__c)` · `object-in-app(PTSF_Subsidy, Treatment_Type__c)` · `object-in-app(PTSF_Subsidy, Medical_History__c)` (the app's API name is a build how-call; the build ruling records it and these predicates follow it)
-
 ## Manual validation scenes
 
 > Run cold, in the build org, after the deploy. Open records by Classic URL (`/<record Id>`) and
@@ -184,3 +174,20 @@ design_hash: 4bd2f82a8da2
 4. Patient search: `SELECT Id, Name FROM Account WHERE Patient_Reference__c = '<one seeded reference>'`
 5. For each, record the first plan's `leadingOperationType`, `relativeCost` and any notes. The first plan is the one that runs, and plans are sorted best first [docs:https://developer.salesforce.com/docs/platform/api-rest/guide/dome-query-explain.html].
 **Expected:** both first plans lead with `Index`, not `TableScan`, using the filter field. **Sign-off:** _name / date / pass·fail_, with the org, row counts and both plan outputs attached.
+
+### Scene H — Sharing defaults and hierarchy access (persona: platform-admin; criterion C15)
+1. Log in as a platform admin with the Manage Sharing permission.
+2. In Setup, go to **Sharing Settings** and find **Organization-Wide Defaults**.
+3. Confirm these rows (Default Internal Access / Default External Access):
+   - **Subsidy Application**, **Medical History**, **Medical History Access**: Private / Private.
+   - **Assessment**, **Practitioner Treatment**: Controlled by Parent.
+   - **Treatment Type**: Public Read Only internally.
+4. Confirm **Grant Access Using Hierarchies** is cleared for **Medical History** and **Medical History Access** [docs:https://help.salesforce.com/s/articleView?id=platform.security_controlling_access_using_hierarchies.htm&release=264.0.0&type=5].
+**Expected:** every value matches step 3, and both medical-history rows show hierarchy access cleared. **Sign-off:** _name / date / pass·fail_.
+
+### Scene I — Every new object has a tab in the PTSF Subsidy app (persona: platform-admin, break-glass for steps 3–4; criterion C22)
+1. Log in as a platform admin with `PTSF_Data_Model_Admin`. Open the App Launcher and choose **PTSF Subsidy**.
+2. Confirm the navigation shows **Subsidy Applications**, **Assessments**, **Treatment Types** and **Practitioner Treatments**, and does not show the two medical-history tabs.
+3. Assign yourself `PTSF_Medical_History_Break_Glass` (it grants the two medical-history tabs; run this with Scene D to hold it once). Reload the app.
+4. Confirm the navigation now also shows **Medical Histories** and **Medical History Access**. Open each of the six tabs once. Remove break-glass and record that you held it in the sign-off.
+**Expected:** all six tabs open from the PTSF Subsidy app, and the two medical-history tabs appear only with break-glass. **Sign-off:** _name / date / pass·fail_.
