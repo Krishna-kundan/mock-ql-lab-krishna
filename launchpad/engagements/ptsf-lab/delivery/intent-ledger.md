@@ -16,7 +16,7 @@ Status: ⬜ Not started · ✅ Delivered · 🔄 Needs re-verify (scope drifted)
 
 | Intent | Phase | Status | PR | Evidence | Scope hash @ delivery | Started | Delivered |
 |--------|-------|--------|----|----------|-----------------------|---------|-----------|
-| INT-001 | 1 | ⬜ Not started | — | — | — | 2026-11-26 | — |
+| INT-001 | 1 | ✅ Delivered | https://github.com/Krishna-kundan/mock-ql-lab-krishna/pull/11 | — | `4a7cc08387e3` | 2026-11-26 | 2026-11-26 |
 | INT-002 | 1 | ⬜ Not started | — | — | — | — | — |
 | INT-003 | 1 | ⬜ Not started | — | — | — | — | — |
 | INT-004 | 1 | ⬜ Not started | — | — | — | — | — |
